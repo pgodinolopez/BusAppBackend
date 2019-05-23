@@ -76,14 +76,14 @@ class Usuarios implements UserInterface
     protected $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Cita", mappedBy="id_usuario")
+     * @ORM\OneToMany(targetEntity="App\Entity\RutaFavorita", mappedBy="id_usuario")
      */
-    private $citas;
+    private $rutasFavoritas;
  
  
     public function __construct()
     {
-        $this->citas = new ArrayCollection();
+        $this->rutasFavoritas = new ArrayCollection();
     }
  
     /**
@@ -302,11 +302,11 @@ class Usuarios implements UserInterface
     }
 
     /**
-     * @return Collection|Cita[]
+     * @return Collection|RutaFavorita[]
      */
-    public function getCitas(): Collection
+    public function getRutasFavoritas(): Collection
     {
-        return $this->citas;
+        return $this->rutasFavoritas;
     }
  
 }

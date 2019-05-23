@@ -1,4 +1,9 @@
 lexik_jwt_authentication:
-    secret_key: '%env(resolve:JWT_SECRET_KEY)%'
-    public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
-    pass_phrase: '%env(JWT_PASSPHRASE)%'
+    private_key_path: '%kernel.project_dir%/%env(JWT_PRIVATE_KEY_PATH)%'
+    public_key_path:  '%kernel.project_dir%/%env(JWT_PUBLIC_KEY_PATH)%'
+    pass_phrase:      '%env(JWT_PASSPHRASE)%'
+    token_ttl:        '%env(JWT_TOKENTTL)%'
+    user_identity_field: email
+    encoder:
+        service: lexik_jwt_authentication.encoder.lcobucci
+        signature_algorithm: RS512
