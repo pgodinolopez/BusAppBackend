@@ -64,9 +64,19 @@ class RutaFavorita
     protected $pmr;
 
     /**
-     * @ORM\Column(type="object", length=100, nullable=true)
+     * @ORM\Column(type="json", length=300, nullable=true)
      */
     protected $linea;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $origen;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $destino;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Usuarios", inversedBy="rutasFavoritas")
@@ -176,12 +186,12 @@ class RutaFavorita
         return $this;
     }
 
-    public function getPmr(): ?boolean
+    public function getPmr(): ?bool
     {
         return $this->pmr;
     }
 
-    public function setPmr(?boolean $pmr): self
+    public function setPmr(?bool $pmr): self
     {
         $this->pmr = $pmr;
 
@@ -208,6 +218,30 @@ class RutaFavorita
     public function setIdUsuario(?Usuarios $id_usuario): self
     {
         $this->id_usuario = $id_usuario;
+
+        return $this;
+    }
+
+    public function getOrigen(): ?string
+    {
+        return $this->origen;
+    }
+
+    public function setOrigen(?string $origen): self
+    {
+        $this->origen = $origen;
+
+        return $this;
+    }
+
+    public function getDestino(): ?string
+    {
+        return $this->destino;
+    }
+
+    public function setDestino(?string $destino): self
+    {
+        $this->destino = $destino;
 
         return $this;
     }

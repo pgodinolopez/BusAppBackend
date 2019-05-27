@@ -198,27 +198,27 @@ class ApiController extends FOSRestController {
     }
 
 
-    // CITA URI's
+    // RUTA URI's
 
     /**
-     * @Rest\Get("/v1/citas.{_format}", name="citas_list_all", defaults={"_format":"json"})
+     * @Rest\Get("/v1/rutas_favoritas.{_format}", name="rutas_favoritas_list_all", defaults={"_format":"json"})
      *
      * @SWG\Response(
      *     response=200,
-     *     description="Obtiene todas las citas para el actual usuario logeado."
+     *     description="Obtiene todas las rutas favoritas para el actual usuario logeado."
      * )
      *
      * @SWG\Response(
      *     response=500,
-     *     description="An error has occurred trying to get all citas."
+     *     description="An error has occurred trying to get all rutas favoritas."
      * )
      *
-     * @SWG\Tag(name="Cita")
+     * @SWG\Tag(name="RutaFavorita")
      */
-    public function getAllCitasAction(Request $request) {
+    public function getAllRutasFavoritasAction(Request $request) {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
-        $citas = [];
+        $rutas_favoritas = [];
         $message = "";
 
         try {
@@ -226,99 +226,44 @@ class ApiController extends FOSRestController {
             $error = false;
 
             $id_usuario = $this->getUser()->getId();
-            $citas = $em->getRepository("App:Cita")->findBy([
+            $rutas_favoritas = $em->getRepository("App:RutaFavorita")->findBy([
                 "id_usuario" => $id_usuario,
             ]);
 
-            if (is_null($citas)) {
-                $citas = [];
+            if (is_null($rutas_favoritas)) {
+                $rutas_favoritas = [];
             }
         } catch (Exception $ex) {
             $code = 500;
             $error = true;
-            $message = "An error has occurred trying to get all Citas - Error: {$ex->getMessage()}";
+            $message = "An error has occurred trying to get all rutas favoritas - Error: {$ex->getMessage()}";
         }
 
         $response = [
             'code' => $code,
             'error' => $error,
-            'data' => $code == 200 ? $citas : $message,
+            'data' => $code == 200 ? $rutas_favoritas : $message,
         ];
 
         return new Response($serializer->serialize($response, "json"));
     }
 
+    
     /**
-     * @Rest\Get("/v1/board/{id}.{_format}", name="board_list", defaults={"_format":"json"})
-     *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Gets board info based on passed ID parameter."
-     * )
-     *
-     * @SWG\Response(
-     *     response=400,
-     *     description="The board with the passed ID parameter was not found or doesn't exist."
-     * )
-     *
-     * @SWG\Parameter(
-     *     name="id",
-     *     in="path",
-     *     type="string",
-     *     description="The board ID"
-     * )
-     *
-     *
-     * @SWG\Tag(name="Board")
-     */
-    public function getBoardAction(Request $request, $id) {
-        $serializer = $this->get('jms_serializer');
-        $em = $this->getDoctrine()->getManager();
-        $board = [];
-        $message = "";
-
-        try {
-            $code = 200;
-            $error = false;
-
-            $board_id = $id;
-            $board = $em->getRepository("App:Board")->find($board_id);
-
-            if (is_null($board)) {
-                $code = 500;
-                $error = true;
-                $message = "The board does not exist";
-            }
-        } catch (Exception $ex) {
-            $code = 500;
-            $error = true;
-            $message = "An error has occurred trying to get the current Board - Error: {$ex->getMessage()}";
-        }
-
-        $response = [
-            'code' => $code,
-            'error' => $error,
-            'data' => $code == 200 ? $board : $message,
-        ];
-
-        return new Response($serializer->serialize($response, "json"));
-    }
-
-    /**
-     * @Rest\Post("/v1/citas.{_format}", name="citas_add", defaults={"_format":"json"})
+     * @Rest\Post("/v1/rutas_favoritas.{_format}", name="rutas_favoritas_add", defaults={"_format":"json"})
      *
      * @SWG\Response(
      *     response=201,
-     *     description="Cita was added successfully"
+     *     description="Ruta favorita was added successfully"
      * )
      *
      * @SWG\Response(
      *     response=500,
-     *     description="An error was occurred trying to add new cita"
+     *     description="An error was occurred trying to add new ruta favorita"
      * )
      *
      * @SWG\Parameter(
-     *     name="dia",
+     *     name="idlinea",
      *     in="body",
      *     type="string",
      *     description="El dia de la cita",
@@ -326,7 +271,7 @@ class ApiController extends FOSRestController {
      * )
      *  
      * @SWG\Parameter(
-     *     name="hora",
+     *     name="codigo",
      *     in="body",
      *     type="string",
      *     description="La hora de la cita",
@@ -334,10 +279,74 @@ class ApiController extends FOSRestController {
      * )
      * 
      * @SWG\Parameter(
-     *     name="observaciones",
+     *     name="dias",
      *     in="body",
      *     type="string",
      *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="horaSalida",
+     *     in="body",
+     *     type="string",
+     *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="horaLlegada",
+     *     in="body",
+     *     type="string",
+     *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="operadores",
+     *     in="body",
+     *     type="string",
+     *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="precio_billete_sencillo",
+     *     in="body",
+     *     type="decimal",
+     *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="pmr",
+     *     in="body",
+     *     type="bool",
+     *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="linea",
+     *     in="body",
+     *     type="object",
+     *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="origen",
+     *     in="body",
+     *     type="object",
+     *     description="Origen de la ruta",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="destino",
+     *     in="body",
+     *     type="object",
+     *     description="Destino de la ruta",
      *     schema={}
      * )
      * 
@@ -349,59 +358,75 @@ class ApiController extends FOSRestController {
      *     schema={}
      * )
      * 
-     * @SWG\Tag(name="Cita")
+     * @SWG\Tag(name="RutaFavorita")
      */
     public function addCitaAction(Request $request) {
         $serializer = $this->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
-        $cita = [];
+        $ruta_favorita = [];
         $message = "";
 
         try {
             $code = 201;
             $error = false;
-            $dia = $request->request->get("dia", null);
-            $hora = $request->request->get("hora", null);
-            $observaciones = $request->request->get("observaciones", null);
-            $id = $request->request->get("_id", null);
+            $idlinea = $request->request->get("idlinea", null);
+            $dias = $request->request->get("dias", null);
+            $codigo = $request->request->get("codigo", null);
+            $horaSalida = $request->request->get("horaSalida", null);
+            $horaLlegada = $request->request->get("horaLlegada", null);
+            $operadores = $request->request->get("operadores", null);
+            $precio_billete_sencillo = $request->request->get("precio_billete_sencillo", null);
+            $pmr = $request->request->get("pmr", null);
+            $linea = $request->request->get("linea", null);
+            $origen = $request->request->get("origen", null);
+            $destino = $request->request->get("destino", null);
+            $id_usuario = $this->getUser()->getId();
             $user = $this->getDoctrine()
                 ->getRepository(Usuarios::class)
                 ->findOneBy([
-                    'id' => $id,
+                    'id' => $id_usuario,
                 ]);
 
-            if (!is_null($dia) && !is_null($hora) && !is_null($observaciones)) {
-                $cita = new Cita();
-                $cita->setDia($dia);
-                $cita->setHora($hora);
-                $cita->setObservaciones($observaciones);
-                $cita->setIdUsuario($user);
+            if (!is_null($idlinea) && !is_null($dias) && !is_null($codigo) && !is_null($horaSalida) && !is_null($horaLlegada) && !is_null($operadores) && !is_null($precio_billete_sencillo) && !is_null($pmr) && !is_null($linea) && !is_null($origen) && !is_null($destino)) {
+                $ruta_favorita = new RutaFavorita();
+                $ruta_favorita->setIdLinea($idlinea);
+                $ruta_favorita->setDias($dias);
+                $ruta_favorita->setCodigo($codigo);
+                $ruta_favorita->setHoraSalida($horaSalida);
+                $ruta_favorita->setHoraLlegada($horaLlegada);
+                $ruta_favorita->setOperadores($operadores);
+                $ruta_favorita->setPrecio_billete_sencillo($precio_billete_sencillo);
+                $ruta_favorita->setPmr($pmr);
+                $ruta_favorita->setLinea(($linea));
+                $ruta_favorita->setOrigen($origen);
+                $ruta_favorita->setDestino($destino);
+                $ruta_favorita->setIdUsuario($user);
 
                 // $token_dispositivo = 'cXmtEchpxeU:APA91bEj6vmvW6dtGoVjFYp5fiIs9UF3pXucv-jNMv1nB-EWxZvPHqQgu_91mMKVMsGHrP6q36zxdiWwn3rwiEKV76FYNGywuPaYvAJhwKNps193-8-vE9dxuroiElS8uhPZGzrNCBye';
                 // cXmtEchpxeU:APA91bEj6vmvW6dtGoVjFYp5fiIs9UF3pXucv-jNMv1nB-EWxZvPHqQgu_91mMKVMsGHrP6q36zxdiWwn3rwiEKV76FYNGywuPaYvAJhwKNps193-8-vE9dxuroiElS8uhPZGzrNCB
                 
-                $token_dispositivo = $user->getTokenDispositivo();
-                $mensaje = 'Nueva cita el dia ' . $dia . ' a las ' . $hora;
+                // $token_dispositivo = $user->getTokenDispositivo();
+                // $mensaje = 'Nueva cita el dia ' . $dia . ' a las ' . $hora;
 
-                $this->enviarNotificacionFirebase($token_dispositivo, 'Cita', $mensaje);
-                $em->persist($cita);
+                // $this->enviarNotificacionFirebase($token_dispositivo, 'Cita', $mensaje);
+                $em->persist($ruta_favorita);
                 $em->flush();
             } else {
                 $code = 500;
                 $error = true;
-                $message = "An error has occurred trying to add new cita - Error: You must to provide a cita name";
+                $message = "An error has occurred trying to add new ruta favorita - Error: You must to provide a ruta favorita name";
             }
         } catch (Exception $ex) {
             $code = 500;
             $error = true;
-            $message = "An error has occurred trying to add new cita - Error: {$ex->getMessage()}";
+            $message = "An error has occurred trying to add new ruta favorita - Error: {$ex->getMessage()}";
         }
 
         $response = [
             'code' => $code,
             'error' => $error,
-            'token' => $token_dispositivo,
-            'data' => $code == 201 ? $cita : $message,
+            // 'token' => $token_dispositivo,
+            'data' => $code == 201 ? $ruta_favorita : $message,
         ];
 
         return new Response($serializer->serialize($response, "json"));
