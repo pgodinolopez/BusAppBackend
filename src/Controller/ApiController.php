@@ -287,7 +287,7 @@ class ApiController extends FOSRestController {
      * )
      * 
      * @SWG\Parameter(
-     *     name="horaSalida",
+     *     name="hora_salida",
      *     in="body",
      *     type="string",
      *     description="Observaciones de la cita",
@@ -295,7 +295,7 @@ class ApiController extends FOSRestController {
      * )
      * 
      * @SWG\Parameter(
-     *     name="horaLlegada",
+     *     name="hora_llegada",
      *     in="body",
      *     type="string",
      *     description="Observaciones de la cita",
@@ -312,6 +312,22 @@ class ApiController extends FOSRestController {
      * 
      * @SWG\Parameter(
      *     name="precio_billete_sencillo",
+     *     in="body",
+     *     type="decimal",
+     *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="precio_tarjeta",
+     *     in="body",
+     *     type="decimal",
+     *     description="Observaciones de la cita",
+     *     schema={}
+     * )
+     * 
+     * @SWG\Parameter(
+     *     name="tiempo_estimado",
      *     in="body",
      *     type="decimal",
      *     description="Observaciones de la cita",
@@ -372,10 +388,12 @@ class ApiController extends FOSRestController {
             $idlinea = $request->request->get("idlinea", null);
             $dias = $request->request->get("dias", null);
             $codigo = $request->request->get("codigo", null);
-            $horaSalida = $request->request->get("horaSalida", null);
-            $horaLlegada = $request->request->get("horaLlegada", null);
+            $horaSalida = $request->request->get("hora_salida", null);
+            $horaLlegada = $request->request->get("hora_llegada", null);
             $operadores = $request->request->get("operadores", null);
             $precio_billete_sencillo = $request->request->get("precio_billete_sencillo", null);
+            $precio_tarjeta = $request->request->get("precio_tarjeta", null);
+            $tiempo_estimado = $request->request->get("tiempo_estimado", null);
             $pmr = $request->request->get("pmr", null);
             $linea = $request->request->get("linea", null);
             $origen = $request->request->get("origen", null);
@@ -396,6 +414,8 @@ class ApiController extends FOSRestController {
                 $ruta_favorita->setHoraLlegada($horaLlegada);
                 $ruta_favorita->setOperadores($operadores);
                 $ruta_favorita->setPrecio_billete_sencillo($precio_billete_sencillo);
+                $ruta_favorita->setPrecioTarjeta($precio_tarjeta);
+                $ruta_favorita->setTiempoEstimado($tiempo_estimado);
                 $ruta_favorita->setPmr($pmr);
                 $ruta_favorita->setLinea(($linea));
                 $ruta_favorita->setOrigen($origen);

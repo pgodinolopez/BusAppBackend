@@ -49,14 +49,24 @@ class RutaFavorita
     protected $horaLlegada;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $operadores;
 
     /**
-     * @ORM\Column(type="decimal", length=100, nullable=true)
+     * @ORM\Column(type="decimal", precision=5, scale=2, length=100, nullable=true)
      */
     protected $precio_billete_sencillo;
+
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, length=100, length=100, nullable=true)
+     */
+    protected $precio_tarjeta;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $tiempo_estimado;
 
     /**
      * @ORM\Column(type="boolean", length=100, nullable=true)
@@ -182,6 +192,30 @@ class RutaFavorita
     public function setPrecio_billete_sencillo($precio_billete_sencillo): self
     {
         $this->precio_billete_sencillo = $precio_billete_sencillo;
+
+        return $this;
+    }
+
+    public function getPrecioTarjeta()
+    {
+        return $this->precio_tarjeta;
+    }
+
+    public function setPrecioTarjeta($precio_tarjeta): self
+    {
+        $this->precio_tarjeta = $precio_tarjeta;
+
+        return $this;
+    }
+
+    public function getTiempoEstimado()
+    {
+        return $this->tiempo_estimado;
+    }
+
+    public function setTiempoEstimado($tiempo_estimado): self
+    {
+        $this->tiempo_estimado = $tiempo_estimado;
 
         return $this;
     }
