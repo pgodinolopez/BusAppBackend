@@ -28,12 +28,12 @@ class ApiController extends FOSRestController {
      *
      * @SWG\Response(
      *     response=200,
-     *     description="User was logged in successfully"
+     *     description="Éxito, el usuario ha sido logeado"
      * )
      *
      * @SWG\Response(
      *     response=500,
-     *     description="User was not logged in successfully"
+     *     description="Error, el usuario no se ha podido logear"
      * )
      *
      * @SWG\Parameter(
@@ -48,7 +48,7 @@ class ApiController extends FOSRestController {
      *     name="_password",
      *     in="body",
      *     type="string",
-     *     description="La contraseña",
+     *     description="La contraseña del usuario",
      *     schema={}
      * )
      *
@@ -61,12 +61,12 @@ class ApiController extends FOSRestController {
      *
      * @SWG\Response(
      *     response=201,
-     *     description="User was successfully registered"
+     *     description="Éxito, el usuario ha sido registrado"
      * )
      *
      * @SWG\Response(
      *     response=500,
-     *     description="User was not successfully registered"
+     *     description="Error, el usuario no ha podido ser registrado"
      * )
      *
      * @SWG\Parameter(
@@ -81,7 +81,7 @@ class ApiController extends FOSRestController {
      *     name="_telefono",
      *     in="body",
      *     type="string",
-     *     description="El telefono",
+     *     description="El teléfono del usuario",
      *     schema={}
      * )
      *
@@ -97,14 +97,14 @@ class ApiController extends FOSRestController {
      *     name="_password",
      *     in="query",
      *     type="string",
-     *     description="The password"
+     *     description="La contraseña del usuario"
      * )
      * 
      * @SWG\Parameter(
      *     name="_token_dispositivo",
      *     in="query",
      *     type="string",
-     *     description="El id del dispositivo",
+     *     description="El id del dispositivo móvil del usuario",
      *     schema={}
      * )
      * 
@@ -140,7 +140,7 @@ class ApiController extends FOSRestController {
         } catch (Exception $ex) {
             $code = 500;
             $error = true;
-            $message = "An error has occurred trying to register the user - Error: {$ex->getMessage()}";
+            $message = "Error, el usuario no ha podido ser registrado - Error: {$ex->getMessage()}";
         }
 
         $response = [
@@ -151,52 +151,6 @@ class ApiController extends FOSRestController {
 
         return new Response($serializer->serialize($response, "json"));
     }
-
-
-    /**
-     * @Rest\Get("/v1/usuarios.{_format}", name="usuarios_list_all", defaults={"_format":"json"})
-     *
-     * @SWG\Response(
-     *     response=200,
-     *     description="Obtiene todos los usuarios de la base de datos."
-     * )
-     *
-     * @SWG\Response(
-     *     response=500,
-     *     description="An error has occurred trying to get all usuarios."
-     * )
-     *
-     * @SWG\Tag(name="Usuarios")
-     */
-    public function getAllUsuariosAction() {
-        $serializer = $this->get('jms_serializer');
-        $em = $this->getDoctrine()->getManager();
-        $usuarios = [];
-        $message = "";
-
-        try {
-            $code = 200;
-            $error = false;
-            $usuarios = $em->getRepository("App:Usuarios")->findAll();
-
-            if (is_null($usuarios)) {
-                $usuarios = [];
-            }
-        } catch (Exception $ex) {
-            $code = 500;
-            $error = true;
-            $message = "An error has occurred trying to get all Usuarios - Error: {$ex->getMessage()}";
-        }
-
-        $response = [
-            'code' => $code,
-            'error' => $error,
-            'data' => $code == 200 ? $usuarios : $message,
-        ];
-
-        return new Response($serializer->serialize($response, "json"));
-    }
-
 
     // RUTA URI's
 
@@ -210,7 +164,7 @@ class ApiController extends FOSRestController {
      *
      * @SWG\Response(
      *     response=500,
-     *     description="An error has occurred trying to get all rutas favoritas."
+     *     description="Error, no se han podido obtener las rutas favoritas."
      * )
      *
      * @SWG\Tag(name="RutaFavorita")
@@ -236,7 +190,7 @@ class ApiController extends FOSRestController {
         } catch (Exception $ex) {
             $code = 500;
             $error = true;
-            $message = "An error has occurred trying to get all rutas favoritas - Error: {$ex->getMessage()}";
+            $message = "Error, no se han podido obtener las rutas favoritas - Error: {$ex->getMessage()}";
         }
 
         $response = [
@@ -254,19 +208,19 @@ class ApiController extends FOSRestController {
      *
      * @SWG\Response(
      *     response=201,
-     *     description="Ruta favorita was added successfully"
+     *     description="Éxito, la ruta ha sido añadida a favoritos."
      * )
      *
      * @SWG\Response(
      *     response=500,
-     *     description="An error was occurred trying to add new ruta favorita"
+     *     description="Error, no se ha podido añadir la ruta a favoritos."
      * )
      *
      * @SWG\Parameter(
      *     name="idlinea",
      *     in="body",
      *     type="string",
-     *     description="El dia de la cita",
+     *     description="El id de la línea",
      *     schema={}
      * )
      *  
@@ -274,7 +228,7 @@ class ApiController extends FOSRestController {
      *     name="codigo",
      *     in="body",
      *     type="string",
-     *     description="La hora de la cita",
+     *     description="La código de la línea",
      *     schema={}
      * )
      * 
@@ -282,7 +236,7 @@ class ApiController extends FOSRestController {
      *     name="dias",
      *     in="body",
      *     type="string",
-     *     description="Observaciones de la cita",
+     *     description="La frecuencia de paso de la línea",
      *     schema={}
      * )
      * 
@@ -290,7 +244,7 @@ class ApiController extends FOSRestController {
      *     name="hora_salida",
      *     in="body",
      *     type="string",
-     *     description="Observaciones de la cita",
+     *     description="La hora de salida",
      *     schema={}
      * )
      * 
@@ -298,7 +252,7 @@ class ApiController extends FOSRestController {
      *     name="hora_llegada",
      *     in="body",
      *     type="string",
-     *     description="Observaciones de la cita",
+     *     description="La hora de llegada",
      *     schema={}
      * )
      * 
@@ -306,7 +260,7 @@ class ApiController extends FOSRestController {
      *     name="operadores",
      *     in="body",
      *     type="string",
-     *     description="Observaciones de la cita",
+     *     description="Las distintas empresas que ofrecen servicio para esta línea",
      *     schema={}
      * )
      * 
@@ -314,7 +268,7 @@ class ApiController extends FOSRestController {
      *     name="precio_billete_sencillo",
      *     in="body",
      *     type="decimal",
-     *     description="Observaciones de la cita",
+     *     description="Precio del billete sencillo",
      *     schema={}
      * )
      * 
@@ -322,7 +276,7 @@ class ApiController extends FOSRestController {
      *     name="precio_tarjeta",
      *     in="body",
      *     type="decimal",
-     *     description="Observaciones de la cita",
+     *     description="Precio con tarjeta del consorcio",
      *     schema={}
      * )
      * 
@@ -330,7 +284,7 @@ class ApiController extends FOSRestController {
      *     name="tiempo_estimado",
      *     in="body",
      *     type="decimal",
-     *     description="Observaciones de la cita",
+     *     description="Duración estiamda del viaje",
      *     schema={}
      * )
      * 
@@ -338,7 +292,7 @@ class ApiController extends FOSRestController {
      *     name="pmr",
      *     in="body",
      *     type="bool",
-     *     description="Observaciones de la cita",
+     *     description="Adaptado o no a personas con movilidad reducida",
      *     schema={}
      * )
      * 
@@ -346,7 +300,7 @@ class ApiController extends FOSRestController {
      *     name="linea",
      *     in="body",
      *     type="object",
-     *     description="Observaciones de la cita",
+     *     description="Línea a la que pertenece la ruta",
      *     schema={}
      * )
      * 
@@ -422,24 +376,17 @@ class ApiController extends FOSRestController {
                 $ruta_favorita->setDestino($destino);
                 $ruta_favorita->setIdUsuario($user);
 
-                // $token_dispositivo = 'cXmtEchpxeU:APA91bEj6vmvW6dtGoVjFYp5fiIs9UF3pXucv-jNMv1nB-EWxZvPHqQgu_91mMKVMsGHrP6q36zxdiWwn3rwiEKV76FYNGywuPaYvAJhwKNps193-8-vE9dxuroiElS8uhPZGzrNCBye';
-                // cXmtEchpxeU:APA91bEj6vmvW6dtGoVjFYp5fiIs9UF3pXucv-jNMv1nB-EWxZvPHqQgu_91mMKVMsGHrP6q36zxdiWwn3rwiEKV76FYNGywuPaYvAJhwKNps193-8-vE9dxuroiElS8uhPZGzrNCB
-                
-                // $token_dispositivo = $user->getTokenDispositivo();
-                // $mensaje = 'Nueva cita el dia ' . $dia . ' a las ' . $hora;
-
-                // $this->enviarNotificacionFirebase($token_dispositivo, 'Cita', $mensaje);
                 $em->persist($ruta_favorita);
                 $em->flush();
             } else {
                 $code = 500;
                 $error = true;
-                $message = "An error has occurred trying to add new ruta favorita - Error: You must to provide a ruta favorita name";
+                $message = "Error, no se ha podido añadir la ruta a favoritos - Error: Debes proporcionar un id de linea";
             }
         } catch (Exception $ex) {
             $code = 500;
             $error = true;
-            $message = "An error has occurred trying to add new ruta favorita - Error: {$ex->getMessage()}";
+            $message = "Error, no se ha podido añadir la ruta a favoritos - Error: {$ex->getMessage()}";
         }
 
         $response = [
@@ -457,12 +404,12 @@ class ApiController extends FOSRestController {
      *
      * @SWG\Response(
      *     response=201,
-     *     description="Ruta favorita was deleted successfully"
+     *     description="Éxito, la ruta ha sido eliminada de favoritos"
      * )
      *
      * @SWG\Response(
      *     response=500,
-     *     description="An error was occurred trying to delete ruta favorita"
+     *     description="Error, no se ha podido eliminar la ruta de favoritos"
      * )
      * 
      * @SWG\Parameter(
@@ -492,12 +439,12 @@ class ApiController extends FOSRestController {
             } else {
                 $code = 500;
                 $error = true;
-                $message = "An error has occurred trying to delete ruta favorita - Error: You must to provide a ruta favorita id";
+                $message = "Error, no se ha podido eliminar la ruta de favoritos - Error: Debes proporcionar un id de ruta";
             }
         } catch (Exception $ex) {
             $code = 500;
             $error = true;
-            $message = "An error has occurred trying to delete ruta favorita - Error: {$ex->getMessage()}";
+            $message = "Error, no se ha podido eliminar la ruta de favoritos - Error: {$ex->getMessage()}";
         }
 
         $response = [
@@ -518,7 +465,6 @@ class ApiController extends FOSRestController {
                 $token_dispositivo
             ),
             'notification' => array( 'title' => $titulo, 'body' => $mensaje)
-            // 'data' => array( 'title' => $notificationTitle, 'body' => $notificationBody)
         );
         $fields = json_encode($fields);
 
