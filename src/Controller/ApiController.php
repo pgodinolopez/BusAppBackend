@@ -167,7 +167,7 @@ class ApiController extends FOSRestController {
      *     description="Error, no se han podido obtener las rutas favoritas."
      * )
      *
-     * @SWG\Tag(name="RutaFavorita")
+     * @SWG\Tag(name="Rutas favoritas")
      */
     public function getAllRutasFavoritasAction(Request $request) {
         $serializer = $this->get('jms_serializer');
@@ -328,7 +328,7 @@ class ApiController extends FOSRestController {
      *     schema={}
      * )
      * 
-     * @SWG\Tag(name="RutaFavorita")
+     * @SWG\Tag(name="Rutas favoritas")
      */
     public function addRutaFavoritaAction(Request $request) {
         $serializer = $this->get('jms_serializer');
@@ -381,7 +381,7 @@ class ApiController extends FOSRestController {
             } else {
                 $code = 500;
                 $error = true;
-                $message = "Error, no se ha podido añadir la ruta a favoritos - Error: Debes proporcionar un id de linea";
+                $message = "Error, no se ha podido añadir la ruta a favoritos - Error: No se han enviado todos los parámetros necesarios";
             }
         } catch (Exception $ex) {
             $code = 500;
@@ -420,7 +420,7 @@ class ApiController extends FOSRestController {
      *     schema={}
      * )
      * 
-     * @SWG\Tag(name="Cita")
+     * @SWG\Tag(name="Rutas favoritas")
      */
     public function deleteRutaFavoritaAction(Request $request, $id) {
         $serializer = $this->get('jms_serializer');
@@ -456,32 +456,4 @@ class ApiController extends FOSRestController {
         return new Response($serializer->serialize($response, "json"));
     }
 
-    public function enviarNotificacionFirebase($token_dispositivo, $titulo, $mensaje) {
-
-        $url = 'https://fcm.googleapis.com/fcm/send';
-
-        $fields = array(
-            'registration_ids' => array(
-                $token_dispositivo
-            ),
-            'notification' => array( 'title' => $titulo, 'body' => $mensaje)
-        );
-        $fields = json_encode($fields);
-
-        $headers = array(
-            'Authorization: key=' . 'AAAAgb3BG3U:APA91bF5LjLLQLO3LAEm4zkGfV9CdbTmnsA4AIRUbYwZwGI5zSuIIOasJKCD3eRsjbbZRRu8Ws27AxyLs92wM9QheHIxHtYPXoC4Gs_mkt20Kckjd4ZkKTz0bKgdTN9iRlmp1gOAMMlb',
-            'Content-Type: application/json'
-        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-
-        $result = curl_exec($ch);
-        echo $result;
-        curl_close($ch);
-    }
 }
